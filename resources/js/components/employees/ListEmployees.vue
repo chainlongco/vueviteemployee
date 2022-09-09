@@ -4,7 +4,8 @@
             <h3>Employees Information<button @click="addEmployee" type="button" class="btn btn-primary" style="float:right;">Add New Employee</button></h3>
         </div>
         <div class="card-body">
-            <div class='table-responsive'> <!-- to solve Jquery Datatables issue when resizing, https://stackoverflow.com/questions/61557675/jquery-datatables-issue-when-resizing-->
+            <div class='table-responsive'> <!-- to solve Jquery Datatables issue when resizing - columns not lineup, 
+                https://stackoverflow.com/questions/61557675/jquery-datatables-issue-when-resizing-->
                 <table class="table table-striped table-hover cell-border" id="employeesDatatable" style="padding: 10px; visibility: hidden;">
                     <thead>
                         <tr style="border-top: 1px solid #000;">
@@ -35,8 +36,8 @@
                             <td class="align-middle"> {{ employee.zip }} </td>
                             <td>
                                 <div class="row justify-content-around" style="margin:auto;">
-                                    <a href="#" class="col-md-5 btn btn-primary" title="Edit"><span class="bi-pencil-fill"></span></a>
-                                    <a href="#" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a>
+                                    <a href="#" @click="editEmployee(employee.id)" class="col-md-5 btn btn-primary" title="Edit"><span class="bi-pencil-fill"></span></a>
+                                    <a href="#" @click="deleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a>
                                 </div>
                             </td>
                         </tr>
@@ -76,6 +77,7 @@
                 <form enctype="multipart/form-data">
                 <!-- <Form ref="form" @submit="handleSubmit" :validation-schema="editing ? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues"> -->
                     <div class="modal-body">
+                        <input v-model="form.id" class="form-control" type="hidden"/>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="firstName">First Name</label>
@@ -203,7 +205,8 @@
                             </div>
                             <div class="col-md-2">
                                 <div v-if="form.img" class="mt-2">
-                                    <img :src="imagePreview" class="figure-img img-fluid rounded"  style="max-height:100px;">
+                                    <!-- <img :src="imagePreview" alt="Image File not Found" class="figure-img img-fluid rounded"  style="max-height:100px;"> -->
+                                    <img :src="imagePreview" alt="Image File not Found" class="figure-img img-fluid rounded"  style="max-height:100px;">
                                 </div>
                             </div>
                         </div>
@@ -240,7 +243,7 @@
                 editing: false,
                 employees_data: [],
                 'form': {
-                    'first_name':'', 'middle_name':'', 'last_name':'', 'email':'', 'phone':'', 'birthday':'', 'ssn':'', 'gender':'Male', 'position':'', 'salary':'', 'address':'', 'address2':'', 'city':'', 'state':'', 'zip':'', 'img':'', 'start_date':'', 'end_date':''
+                    'id':'', 'first_name':'', 'middle_name':'', 'last_name':'', 'email':'', 'phone':'', 'birthday':'', 'ssn':'', 'gender':'Male', 'position':'', 'salary':'', 'address':'', 'address2':'', 'city':'', 'state':'', 'zip':'', 'img':'', 'start_date':'', 'end_date':''
                 },
                 imagePreview: null,
                 image: null
@@ -260,13 +263,15 @@
                         setTimeout(() => {
                             $(document).ready(function(){
                                 document.getElementById("employeesDatatable").style.visibility = "visible";
-                                $("#employeesDatatable").DataTable({
-                                    scrollCollapse: true,
-                                    "columnDefs": [
-                                        {targets: [10], orderable: false},
-                                        {targets: [10], width: "150px"}
-                                    ]
-                                });
+                                if (!($.fn.dataTable.isDataTable('#employeesDatatable'))) { // if datatable has not been initilized
+                                    $("#employeesDatatable").DataTable({
+                                        scrollCollapse: true,
+                                        "columnDefs": [
+                                            {targets: [10], orderable: false},
+                                            {targets: [10], width: "150px"}
+                                        ]
+                                    });
+                                }
                                 document.getElementById("employeeCard").style.visibility = "visible";
                             });
                         }, 0);
@@ -281,6 +286,7 @@
                 // Method 1 (Passing image as an object):
                 let data = new FormData;
                 data.append('image', this.image);
+                data.append('id', this.form.id);
                 data.append('first_name', this.form.first_name);
                 data.append('middle_name', this.form.middle_name);
                 data.append('last_name', this.form.last_name);
@@ -307,12 +313,14 @@
                     .then(response => {
                         this.clearForm();
                         this.hideModal();
+                        this.getEmployees();
                     }).catch(error => {
                         console.log(error);
                         this.clearForm();
                     })
             },
             clearForm() {
+                this.form.id = '';
                 this.form.first_name = '';
                 this.form.middle_name = '';
                 this.form.last_name = '';
@@ -351,6 +359,7 @@
                 reader.readAsDataURL(this.image);
                 reader.onload = e => {
                     this.imagePreview = e.target.result;
+                    //alert(this.imagePreview);
                 };
                 // Method 2 (Passing img as a string):
                 /*this.image = e.target.files[0];
@@ -360,7 +369,51 @@
                     this.form.img = e.target.result;
                     this.imagePreview = e.target.result;
                 };*/
-        },
+            },
+            deleteEmployee(id) {
+                axios.post('/api/employees/delete/' + id)
+                    .then(response => {
+                        this.clearForm();
+                        this.hideModal();
+                        this.getEmployees();
+                    }).catch(error => {
+                        console.log(error);
+                        this.clearForm();
+                    })
+            },
+            editEmployee(id) {
+                axios.get('/api/employees/edit/' + id)
+                    .then(response => {
+                        this.editing = true;
+                        this.form.id = response.data.id;
+                        this.form.first_name = response.data.first_name;
+                        this.form.middle_name = response.data.middle_name;
+                        this.form.last_name = response.data.last_name;
+                        this.form.email = response.data.email;
+                        this.form.phone = response.data.phone;
+                        this.form.birthday = response.data.birthday;
+                        this.form.ssn = response.data.ssn;
+                        this.form.gender = response.data.gender;
+                        this.form.position = response.data.position;
+                        this.form.salary = response.data.salary;
+                        this.form.address = response.data.address;
+                        this.form.address2 = response.data.address2;
+                        this.form.city = response.data.city;
+                        this.form.state = response.data.state;
+                        this.form.zip = response.data.zip;
+                        this.form.img = response.data.img;
+                        // https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-img-src
+                        this.imagePreview = new URL('/public/images/' + this.form.img, import.meta.url);
+                        //alert(this.imagePreview);
+                        this.form.start_date = response.data.start_date;
+                        this.form.end_date = response.data.end_date;
+
+                        $('#employeeFormModal').modal('show');
+                    }).catch(error => {
+                        console.log(error);
+                    })
+            },
+            
         }
     }
 </script>

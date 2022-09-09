@@ -26,5 +26,7 @@ Route::get('/', function () {
 Route::get('/api/employees', [EmployeeController::class, 'index']);
 Route::post('/api/employees', [EmployeeController::class, 'store']);
 Route::get('/employees/list', ApplicationController::class);
+Route::post('/api/employees/delete/{id}', [EmployeeController::class, 'delete']);
+Route::get('/api/employees/edit/{id}', [EmployeeController::class, 'edit']);
 
 //Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
