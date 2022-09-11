@@ -9,6 +9,7 @@
                 <table class="table table-striped table-hover cell-border" id="employeesDatatable" style="padding: 10px; visibility: hidden;">
                     <thead>
                         <tr style="border-top: 1px solid #000;">
+                            <th class="text-center">Photo</th>
                             <th class="text-center">First Name</th>
                             <th class="text-center">Last Name</th>
                             <th class="text-center">Email</th>
@@ -24,6 +25,11 @@
                     </thead>
                     <tbody>
                         <tr v-for="(employee, index) in employees_data" :key="index">
+                            <td class="align-middle">
+                                <div class="mt-2" style="max-height:100px; width:100px;">
+                                    <img :src="retrieveEmployeePhoto(employee.img)" alt="" class="figure-img img-fluid rounded"  style="max-height:100px;">
+                                </div>
+                            </td>
                             <td class="align-middle"> {{ employee.first_name }} </td>
                             <td class="align-middle"> {{ employee.last_name }} </td>
                             <td class="align-middle"> {{ employee.email }} </td>
@@ -44,6 +50,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th class="text-center">Photo</th>
                             <th class="text-center">First Name</th>
                             <th class="text-center">Last Name</th>
                             <th class="text-center">Email</th>
@@ -413,7 +420,13 @@
                         console.log(error);
                     })
             },
-            
+            retrieveEmployeePhoto(employeeImg) {
+                if (employeeImg) {
+                    return new URL('/public/images/' + employeeImg, import.meta.url);
+                } else {
+                    return '';
+                }               
+            },
         }
     }
 </script>

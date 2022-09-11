@@ -75,7 +75,9 @@ class EmployeeController extends Controller
         $oldImageName = '';
         if ($request->id != '') {
             $employee = DB::table('employees')->where('id', $request->id);
-            $oldImageName = $employee->first()->img;
+            if ($employee->first()->img) {
+                $oldImageName = $employee->first()->img;
+            }
             $response = $employee
                 ->update([
                     'first_name' => $request->first_name,
@@ -161,7 +163,12 @@ class EmployeeController extends Controller
 
         // Method 1 (Passing image as an object):
         $image = $request->file('image');
-        $image->move(public_path('/images'), $imageName);
+        //$image->move(public_path('/images'), $imageName); // I can use this directly, but if size is too big, this will cause error. So, I need to resize it first.
+        $filePath = public_path('/images');
+        $img = Image::make($image->path());
+        $img->resize(100, 100, function ($const) {
+            $const->aspectRatio();
+        })->save($filePath.'/'.$imageName);
 
         // Method 2 (Passing img as a string):
         /*//$image = time() . '.' . explode('/', explode(':', substr($request->img, 0, strpos($request->img, ';')))[1])[1];
