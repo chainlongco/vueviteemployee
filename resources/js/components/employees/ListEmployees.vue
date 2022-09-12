@@ -15,32 +15,32 @@
                             <th class="text-center">Email</th>
                             <th class="text-center">Phone</th>
                             <th class="text-center">Position</th>
-                            <th class="text-center">Address</th>
+                            <!-- <th class="text-center">Address</th>
                             <th class="text-center">Address 2</th>
                             <th class="text-center">City</th>
                             <th class="text-center">State</th>
-                            <th class="text-center">Zip</th>
+                            <th class="text-center">Zip</th> -->
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(employee, index) in employees_data" :key="index">
-                            <td class="align-middle">
-                                <div class="mt-2" style="max-height:100px; width:100px;">
-                                    <img :src="retrieveEmployeePhoto(employee.img)" alt="" class="figure-img img-fluid rounded"  style="max-height:100px;">
-                                </div>
+                            <td class="align-middle text-center">
+                                <!-- <div class="" style="max-height:100px; width:100px;"> -->
+                                    <img :src="retrieveEmployeePhoto(employee.img)" alt="" class="img-fluid rounded"  style="max-height:100px;">
+                                <!-- </div> -->
                             </td>
                             <td class="align-middle"> {{ employee.first_name }} </td>
                             <td class="align-middle"> {{ employee.last_name }} </td>
                             <td class="align-middle"> {{ employee.email }} </td>
                             <td class="align-middle"> {{ employee.phone }} </td>
                             <td class="align-middle"> {{ employee.position }} </td>
-                            <td class="align-middle"> {{ employee.address }} </td>
+                            <!-- <td class="align-middle"> {{ employee.address }} </td>
                             <td class="align-middle"> {{ employee.address2}} </td>
                             <td class="align-middle"> {{ employee.city }} </td>
                             <td class="align-middle"> {{ employee.state }} </td>
-                            <td class="align-middle"> {{ employee.zip }} </td>
-                            <td>
+                            <td class="align-middle"> {{ employee.zip }} </td> -->
+                            <td class="align-middle">
                                 <div class="row justify-content-around" style="margin:auto;">
                                     <a href="#" @click="editEmployee(employee.id)" class="col-md-5 btn btn-primary" title="Edit"><span class="bi-pencil-fill"></span></a>
                                     <a href="#" @click="deleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a>
@@ -56,11 +56,11 @@
                             <th class="text-center">Email</th>
                             <th class="text-center">Phone</th>
                             <th class="text-center">Position</th>
-                            <th class="text-center">Address</th>
+                            <!-- <th class="text-center">Address</th>
                             <th class="text-center">Address 2</th>
                             <th class="text-center">City</th>
                             <th class="text-center">State</th>
-                            <th class="text-center">Zip</th>
+                            <th class="text-center">Zip</th> -->
                             <th class="text-center">Actions</th>
                         </tr>
                     </tfoot>
@@ -221,7 +221,7 @@
 
                     <div class="modal-footer">
                         <button @click="hideModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button  @click="handleSubmit" type="button" class="btn btn-primary">Save</button>
+                        <button @click="handleSubmit" type="button" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -274,8 +274,8 @@
                                     $("#employeesDatatable").DataTable({
                                         scrollCollapse: true,
                                         "columnDefs": [
-                                            {targets: [10], orderable: false},
-                                            {targets: [10], width: "150px"}
+                                            {targets: [6], orderable: false},
+                                            {targets: [6], width: "150px"}
                                         ]
                                     });
                                 }

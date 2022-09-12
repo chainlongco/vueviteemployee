@@ -52,7 +52,9 @@ class EmployeeController extends Controller
 
         // Method 1 (Passing image as an object):
         $image = null;
-        $image = time().'.'.$request->image->extension();  
+        if ((!is_string($request->image)) && ($request->image != null)) {
+            $image = time().'.'.$request->image->extension();
+        }
         //$request->image->move(public_path('images'), $image);
 
         // Method 2 (Passing img as a string):
@@ -74,11 +76,12 @@ class EmployeeController extends Controller
         }*/
         $oldImageName = '';
         if ($request->id != '') {
-            $employee = DB::table('employees')->where('id', $request->id);
+            //$employee = DB::table('employees')->where('id', $request->id);
+            $employee = Employee::find($request->id);
             if ($employee->first()->img) {
                 $oldImageName = $employee->first()->img;
             }
-            $response = $employee
+            /*$response = $employee
                 ->update([
                     'first_name' => $request->first_name,
                     'middle_name' => $request->middle_name,
@@ -98,7 +101,29 @@ class EmployeeController extends Controller
                     'img' => $image,
                     'start_date' => $request->start_date,
                     'end_date' => $request->end_date
-                ]);
+                ]);*/
+
+                $employee->first_name = $request->first_name;
+                $employee->middle_name = $request->middle_name;
+                $employee->last_name = $request->last_name;
+                $employee->email = $request->email;
+                $employee->phone = $request->phone;
+                $employee->birthday = $request->birthday;
+                $employee->ssn = $request->ssn;
+                $employee->gender = $request->gender;
+                $employee->position = $request->position;
+                $employee->salary = $request->salary;
+                $employee->address = $request->address;
+                $employee->address2 = $request->address2;
+                $employee->city = $request->city;
+                $employee->state = $request->state;
+                $employee->zip = $request->zip;
+                if ($image) {
+                    $employee->img = $image;
+                }
+                $employee->start_date = $request->start_date;
+                $employee->end_date = $request->end_date;
+                $response = $employee->save();
         } else {
             $response = Employee::create([
                 'first_name' => $request->first_name,
