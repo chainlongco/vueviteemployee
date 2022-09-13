@@ -43,7 +43,8 @@
                             <td class="align-middle">
                                 <div class="row justify-content-around" style="margin:auto;">
                                     <a href="#" @click="editEmployee(employee.id)" class="col-md-5 btn btn-primary" title="Edit"><span class="bi-pencil-fill"></span></a>
-                                    <a href="#" @click="deleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a>
+                                    <!-- <a href="#" @click="deleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a> -->
+                                    <a href="#" @click="confirmDeleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete"><span class="bi-x-lg"></span></a>
                                 </div>
                             </td>
                         </tr>
@@ -376,6 +377,15 @@
                     this.form.img = e.target.result;
                     this.imagePreview = e.target.result;
                 };*/
+            },
+            confirmDeleteEmployee(id) {
+                var result = confirm("Want to delete?");
+                if (result==true) {
+                    this.deleteEmployee(id);
+                    return true;
+                } else {
+                    return false;
+                }
             },
             deleteEmployee(id) {
                 axios.post('/api/employees/delete/' + id)
