@@ -18,7 +18,7 @@ class EmployeeSeeder extends Seeder
     public function run()
     {
         $faker = app(Generator::class);
-        for($i = 0; $i<9; $i++) {
+        for($i = 0; $i<19; $i++) {
             DB::table('employees')->insert([
                 'first_name' => $faker->firstname(),
                 'middle_name' => $faker->name(),

@@ -265,6 +265,8 @@
         },
         methods: {
             getEmployees() {
+                $("#employeesDatatable").DataTable().destroy();
+                //$('#employeesDatatable').empty(); // empty in case the columns change
                 axios.get('/api/employees')
                     .then(response => {
                         this.employees_data = response.data
