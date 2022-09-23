@@ -16,6 +16,24 @@ class EmployeeController extends Controller
     }
 
     public function store(Request $request) {
+        $this->validate($request, [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required',
+            'position' => 'required',
+            'email' => 'required|email|min:6',
+            'phone' => 'required',
+            'birthday' => 'required',
+            'ssn' => 'required',
+            'gender' => 'required',
+            'position' => 'required',
+            'salary' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
+            'start_date' => 'required',
+        ]);
         //$dd($request->all());
         /*return Employee::create([
             'first_name' => "$request("firstName")",

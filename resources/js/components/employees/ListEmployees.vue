@@ -78,7 +78,7 @@
                         <span v-if="editing">Edit Employee</span>
                         <span v-else>Add New Employee</span>
                     </h5>
-                    <button @click="hideModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button @click="cancelModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -91,49 +91,41 @@
                                 <label for="firstName">First Name</label>
                                 <!-- <input v-model="form.firstName" name="firstName" type="text" class="form-control" :class="{'is-invalid': errors.firstName }" id="firstName"
                                     aria-describedby="firstameHelp" placeholder="Enter first name" /> -->
-                                <input v-model="form.first_name" name="firstName" type="text" class="form-control" id="firstName"
-                                    aria-describedby="firstameHelp" placeholder="Enter first name" />    
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.first_name" name="first_name" type="text" class="form-control" id="first_name" @keydown="clearErrorMessage('first_name')"/>    
+                                <span class="text-danger">{{ getError('first_name') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="middleName">Middle Name</label>
-                                <input v-model="form.middle_name" name="middleName" type="text" class="form-control" id="middleName"
-                                    aria-describedby="middleNameHelp" placeholder="Enter middle name" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.middle_name" name="middleName" type="text" class="form-control" id="middleName"/>
                             </div>
                             <div class="col-md-4">
                                 <label for="lastName">Last Name</label>
-                                <input v-model="form.last_name" name="lastName" type="text" class="form-control" id="lastName"
-                                    aria-describedby="lastNameHelp" placeholder="Enter last name" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.last_name" name="lastName" type="text" class="form-control" id="lastName" @keydown="clearErrorMessage('last_name')"/>
+                                <span class="text-danger">{{ getError('last_name') }}</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="email">Email</label>
-                                <input v-model="form.email" name="email" type="email" class="form-control " id="email"
-                                    aria-describedby="emailHelp" placeholder="Enter email" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.email" name="email" type="email" class="form-control" id="email" @keydown="clearErrorMessage('email')"/>
+                                <span class="text-danger">{{ getError('email') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="phone">Phone</label>
-                                <input v-model="form.phone" name="phone" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control " id="phone"
-                                    aria-describedby="phoneHelp" placeholder="Enter phone" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.phone" name="phone" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="phone" @keydown="clearErrorMessage('phone')"/>
+                                <span class="text-danger"> {{getError('phone')}}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="birthday">Birthday</label>
-                                <input v-model="form.birthday" name="birthday" type="date" class="form-control " id="birthday"
-                                    aria-describedby="birthdayHelp" placeholder="Enter birthday" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.birthday" name="birthday" type="date" class="form-control" id="birthday" @keydown="clearErrorMessage('birthday')" @change="clearErrorMessage('birthday')"/>
+                                <span class="text-danger">{{ getError('birthday') }}</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="ssn">SSN</label>
-                                <input v-model="form.ssn" name="ssn" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control " id="ssn"
-                                    aria-describedby="ssnHelp" placeholder="Enter SSN" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.ssn" name="ssn" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="ssn" @keydown="clearErrorMessage('ssn')"/>
+                                <span class="text-danger">{{ getError('ssn') }}</span>
                             </div>
                             <div class="col-md-3">
                                 <div>
@@ -147,69 +139,56 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="position">Position</label>
-                                <input v-model="form.position" name="position" type="text" class="form-control " id="position"
-                                    aria-describedby="positionHelp" placeholder="Enter position" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.position" name="position" type="text" class="form-control" id="position" @keydown="clearErrorMessage('position')"/>
+                                <span class="text-danger">{{ getError('position') }}</span>
                             </div>
                             <div class="col-md-3">
                                 <label for="salary">Salary</label>
-                                <input v-model="form.salary" name="salary" type="text" class="form-control " id="salary"
-                                    aria-describedby="salaryHelp" placeholder="Enter salary" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.salary" name="salary" type="text" class="form-control" id="salary" @keydown="clearErrorMessage('salary')"/>
+                                <span class="text-danger">{{ getError('salary') }}</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-7">
                                 <label for="address">Address</label>
-                                <input v-model="form.address" name="address" type="text" class="form-control " id="address"
-                                    aria-describedby="addressHelp" placeholder="Enter address" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.address" name="address" type="text" class="form-control" id="address" @keydown="clearErrorMessage('address')"/>
+                                <span class="text-danger">{{ getError('address') }}</span>
                             </div>
                             <div class="col-md-5">
                                 <label for="address2">Address2</label>
-                                <input v-model="form.address2" name="address2" type="text" class="form-control " id="address2"
-                                    aria-describedby="address2Help" placeholder="Enter address2" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.address2" name="address2" type="text" class="form-control" id="address2"/>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="city">City</label>
-                                <input v-model="form.city" name="city" type="text" class="form-control " id="city"
-                                    aria-describedby="cityHelp" placeholder="Enter city" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.city" name="city" type="text" class="form-control" id="city" @keydown="clearErrorMessage('city')"/>
+                                <span class="text-danger">{{ getError('city') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="state">State</label>
-                                <input v-model="form.state" name="state" type="text" class="form-control " id="state"
-                                    aria-describedby="stateHelp" placeholder="Enter state" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.state" name="state" type="text" class="form-control" id="state" @keydown="clearErrorMessage('state')"/>
+                                <span class="text-danger">{{ getError('state') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="zip">Zip Code</label>
-                                <input v-model="form.zip" name="zip" type="text" class="form-control "  id="zip"
-                                    aria-describedby="zipHelp" placeholder="Enter zip code" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.zip" name="zip" type="text" class="form-control" id="zip" @keydown="clearErrorMessage('zip')"/>
+                                <span class="text-danger">{{ getError('zip') }}</span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="startDate">Hire Date</label>
-                                <input v-model="form.start_date" name="startDate" type="date" class="form-control " id="startDate"
-                                    aria-describedby="startDateHelp" placeholder="Enter hire date" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.start_date" name="startDate" type="date" class="form-control" id="startDate" @keydown="clearErrorMessage('start_date')" @change="clearErrorMessage('start_date')"/>
+                                <span class="text-danger">{{ getError('start_date') }}</span>
                             </div>
                             <div class="col-md-3">
                                 <label for="endDate">Date Leave</label>
-                                <input v-model="form.end_date" name="endDate" type="date" class="form-control " id="endDate"
-                                    aria-describedby="endDateHelp" placeholder="Enter leave date" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input v-model="form.end_date" name="endDate" type="date" class="form-control" id="endDate"/>
                             </div>
                             <div class="col-md-4">
                                 <label for="img">Image</label>
-                                <input name="img" type="file" @change="imageSelected" class="form-control" id="img"
-                                    aria-describedby="imgHelp" />
-                                <span class="invalid-feedback">{{  }}</span>
+                                <input name="img" type="file" @change="imageSelected" class="form-control" id="img"/>
                             </div>
                             <div class="col-md-2">
                                 <div v-if="form.img" class="mt-2">
@@ -221,7 +200,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button @click="hideModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button @click="cancelModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button @click="handleSubmit" type="button" class="btn btn-primary">Save</button>
                     </div>
                 </form>
@@ -254,7 +233,8 @@
                     'id':'', 'first_name':'', 'middle_name':'', 'last_name':'', 'email':'', 'phone':'', 'birthday':'', 'ssn':'', 'gender':'Male', 'position':'', 'salary':'', 'address':'', 'address2':'', 'city':'', 'state':'', 'zip':'', 'img':'', 'start_date':'', 'end_date':''
                 },
                 imagePreview: null,
-                image: null
+                image: null,
+                errors: [],
             }        
         },
         created() {
@@ -325,8 +305,11 @@
                         this.hideModal();
                         this.getEmployees();
                     }).catch(error => {
-                        console.log(error);
-                        this.clearForm();
+                        //console.log(error.response.status);
+                        if (error.response.status == 422) {
+                            this.errors = error.response.data.errors;
+                        }
+                        //this.clearForm();
                     })
             },
             clearForm() {
@@ -354,6 +337,11 @@
             },
             hideModal() {
                 this.clearForm();
+                $('#employeeFormModal').modal('hide');
+            },
+            cancelModal() {
+                this.clearForm();
+                this.errors = [];
                 $('#employeeFormModal').modal('hide');
             },
             imageSelected(e){
@@ -439,6 +427,17 @@
                     return '';
                 }               
             },
+            getError(fieldName) {
+                if (Object.keys(this.errors).length > 0) {
+                    if (this.errors[fieldName]) {
+                        return this.errors[fieldName][0];
+                    }
+                }
+                return "";    
+            },
+            clearErrorMessage(fieldName) {
+                this.errors[fieldName] = '';
+            }
         }
     }
 </script>
