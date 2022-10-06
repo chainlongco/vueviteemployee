@@ -180,10 +180,13 @@
                                 <span class="text-danger" v-if="hasClientError('city')">{{ getClientError('city') }}</span>
                             </div>
                             <div class="col-md-4">
-                                <label for="state">State</label>
-                                <input v-model="formData.state" name="state" type="text" class="form-control" id="state" @keydown="clearServerError('state')" @blur="validate('state')" @keypress="validate('state')"/>
-                                <span class="text-danger" v-if="hasServerError('state')">{{ getServerError('state') }}</span>
-                                <span class="text-danger" v-if="hasClientError('state')">{{ getClientError('state') }}</span>
+                                <p>State
+                                    <select v-model="formData.state" id="state" style="width: 100%; margin: 0px 0px; height: 37px; border: 1px solid #ced4da; border-radius: .375rem; padding: 0.375rem 0.75rem;" @keydown="clearServerError('state')" @blur="validate('state')" @keypress="validate('state')">
+                                        <option v-for="(state, index) in states" :key="index" :selected="formData.state === state.abbrivation">{{ state.name }}</option>
+                                    </select>
+                                    <span class="text-danger" v-if="hasServerError('state')">{{ getServerError('state') }}</span>
+                                    <span class="text-danger" v-if="hasClientError('state')">{{ getClientError('state') }}</span>
+                                </p>    
                             </div>
                             <div class="col-md-4">
                                 <label for="zip">Zip Code</label>
@@ -229,6 +232,7 @@
     import axios from 'axios';
     import * as yup from 'yup';
     import Form from '../form/Form.vue';
+    import UsaStates from 'usa-states';
     
     //import $ from "jquery";
     //import $ from "jquery/dist/jquery.min.js"
@@ -290,6 +294,7 @@
                 },
                 imagePreview: null,
                 image: null,
+                states: [],
             }        
         },
         created() {
@@ -320,6 +325,7 @@
                                 document.getElementById("employeeCard").style.visibility = "visible";
                             });
                         }, 0);
+                        this.retrieveAllStates();
                     })
                     .catch(error => {
                         document.getElementById("employeeCard").style.visibility = "visible";
@@ -529,11 +535,22 @@
                     });
                 });
             },
+            retrieveAllStates() {
+                
+                var usaStates = new UsaStates.UsaStates({exclude: ['DC']}).states;
+                //alert(usaStates.states[0]['name']);
+                for (let i=0; i<usaStates.length; i++) {
+                    this.states.push(usaStates[i]);
+                }
+                //alert(this.states.length);
+                //alert(this.states[0]['abbreviation']);
+                //alert(this.states[0]['name']);
+            }
         }
     }
 </script>
 <style scoped>
-    #gender:focus {
+    #gender, #state:focus {
         border-color: #dfe2e6;
         box-shadow: 0 0 0 0.3rem rgba(9, 138, 243, 0.25);
     }

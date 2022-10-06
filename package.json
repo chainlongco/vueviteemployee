@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^3.0.3",
+        "usa-states": "^0.0.6",
         "vee-validate": "^4.6.9",
         "vue": "^3.2.37",
         "vue-router": "^4.1.3",
