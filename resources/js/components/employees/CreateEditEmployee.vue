@@ -1,93 +1,17 @@
-<template>
-    <div class="card" id="employeeCard" style="visibility: hidden;">
+<template>   
+    <div class="card" id="employeeCard">
         <div class="card-header text-center">
-            <!-- <h3>Employees Information<button @click="addEmployee" type="button" class="btn btn-primary" style="float:right;">Add New Employee</button></h3> -->
-            <h3>Employees Information<router-link :to="{ name: 'employees.create', params: {id: 'create'} }" class="btn btn-primary" style="float:right;">Add New Employee</router-link></h3>
+            <h3>
+                <span v-if="isEdit">Edit Employee</span>
+                <span v-else>Add New Employee</span>
+                <router-link :to="{ name: 'employees.list' }" class="btn btn-primary" style="float:right;">Employee List</router-link>
+            </h3>
+            <!-- <h3>Add New Employee<router-link :to="{ name: 'employees.list' }" class="btn btn-primary" style="float:right;">Employee List</router-link></h3> -->
         </div>
         <div class="card-body">
-            <h5 class="text-danger" v-if="employeeListError">{{ employeeListError }}</h5>
-            <div class='table-responsive'> <!-- to solve Jquery Datatables issue when resizing - columns not lineup, 
-                https://stackoverflow.com/questions/61557675/jquery-datatables-issue-when-resizing-->
-                <table class="table table-striped table-hover cell-border" id="employeesDatatable" style="padding: 10px; visibility: hidden;">
-                    <thead>
-                        <tr style="border-top: 1px solid #000;">
-                            <th class="text-center">Photo</th>
-                            <th class="text-center">First Name</th>
-                            <th class="text-center">Last Name</th>
-                            <th class="text-center">Email</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Position</th>
-                            <!-- <th class="text-center">Address</th>
-                            <th class="text-center">Address 2</th>
-                            <th class="text-center">City</th>
-                            <th class="text-center">State</th>
-                            <th class="text-center">Zip</th> -->
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(employee, index) in employees_data" :key="index">
-                            <td class="align-middle text-center">
-                                <!-- <div class="" style="max-height:100px; width:100px;"> -->
-                                    <img :src="retrieveEmployeePhoto(employee.img)" alt="" class="img-fluid rounded"  style="max-height:100px;">
-                                <!-- </div> -->
-                            </td>
-                            <td class="align-middle"> {{ employee.first_name }} </td>
-                            <td class="align-middle"> {{ employee.last_name }} </td>
-                            <td class="align-middle"> {{ employee.email }} </td>
-                            <td class="align-middle"> {{ employee.phone }} </td>
-                            <td class="align-middle"> {{ employee.position }} </td>
-                            <!-- <td class="align-middle"> {{ employee.address }} </td>
-                            <td class="align-middle"> {{ employee.address2}} </td>
-                            <td class="align-middle"> {{ employee.city }} </td>
-                            <td class="align-middle"> {{ employee.state }} </td>
-                            <td class="align-middle"> {{ employee.zip }} </td> -->
-                            <td class="align-middle">
-                                <div class="row justify-content-around" style="margin:auto;">
-                                    <!-- <a href="#" @click="editEmployee(employee.id)" class="col-md-5 btn btn-primary" title="Edit"><span class="bi-pencil-fill"></span></a> -->
-                                    <router-link :to="{ name: 'employees.create', params: {id: employee.id} }" class="col-md-5 btn btn-primary" style="float:right;"><span class="bi-pencil-fill"></span></router-link>
-                                    <!-- <a href="#" @click="deleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a> -->
-                                    <a href="#" @click="confirmDeleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete"><span class="bi-x-lg"></span></a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th class="text-center">Photo</th>
-                            <th class="text-center">First Name</th>
-                            <th class="text-center">Last Name</th>
-                            <th class="text-center">Email</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">Position</th>
-                            <!-- <th class="text-center">Address</th>
-                            <th class="text-center">Address 2</th>
-                            <th class="text-center">City</th>
-                            <th class="text-center">State</th>
-                            <th class="text-center">Zip</th> -->
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-        
-    <div class="modal fade" id="employeeFormModal" data-toggle="modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">
-                        <span v-if="editing">Edit Employee</span>
-                        <span v-else>Add New Employee</span>
-                    </h5>
-                    <button @click="closeModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+            <div class="">
                 <form enctype="multipart/form-data">
-                <!-- <Form ref="form" @submit="handleSubmit" :validation-schema="editing ? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues"> -->
-                    <div class="modal-body">
+                    <div class="">
                         <input v-model="formData.id" class="form-control" type="hidden"/>
                         <div class="row mb-3">
                             <div class="col-md-4">
@@ -221,33 +145,21 @@
                         </div>
                     </div>
 
-                    <div class="modal-footer">
-                        <button @click="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button @click="handleSubmit" type="button" class="btn btn-primary">Save</button>
+                    <div style="float: right">
+                        <router-link :to="{ name: 'employees.list' }" class="btn btn-secondary">Cancel</router-link>&nbsp;
+                        <button @click="handleSubmit" type="button" class="btn btn-primary ml-2">Save</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>    
+    </div>
 </template>
+
 <script>
-    import axios from 'axios';
+import axios from 'axios';
     import * as yup from 'yup';
     import Form from '../form/Form.vue';
     import UsaStates from 'usa-states';
-    
-    //import $ from "jquery";
-    //import $ from "jquery/dist/jquery.min.js"
-
-    //import "jquery/dist/jquery.min.js";
-    //import "bootstrap/dist/css/bootstrap.min.css";
-    //import "datatables.net-dt/js/dataTables.dataTables.js";
-    //import "datatables.net-dt/css/jquery.dataTables.min.css";
-    //import "datatables.net-dt/js/dataTables.dataTables";
-    //import "datatables.net-dt/css/jquery.dataTables.min.css";
-    //import axios from "axios";
-    //import $ from "jquery";
-    import {reactive, ref} from 'vue'
 
     const schema = yup.object().shape({
         first_name: yup.string()
@@ -284,60 +196,33 @@
     });
 
     export default {
-        name: 'ListEmployee',
+        name: 'CreateEditEmployee',
         mixins: [Form],
         data() {
             return {
-                editing: false,
-                employees_data: [],
-                employeeListError: false,
                 'formData': {
                     'id':'', 'first_name':'', 'middle_name':'', 'last_name':'', 'email':'', 'phone':'', 'birthday':'', 'ssn':'', 'gender':'', 'position':'', 'salary':'', 'address':'', 'address2':'', 'city':'', 'state':'', 'zip':'', 'img':'', 'start_date':'', 'end_date':''
                 },
                 imagePreview: null,
                 image: null,
                 states: [],
+                isEdit: false,
             }        
         },
         created() {
-            //this.getEmployees();
         },
         mounted() {
-            this.getEmployees();
+            this.retrieveAllStates();
+            //alert(this.$route.params.id);
+            if (!Number.isNaN(this.$route.params.id * 1)) {
+                //alert('inside: ' + this.$route.params.id);
+                this.isEdit = true;
+                this.editEmployee(this.$route.params.id);
+            } else {
+                this.isEdit = false;
+            }
         },
         methods: {
-            async getEmployees() {
-                $("#employeesDatatable").DataTable().destroy();
-                //$('#employeesDatatable').empty(); // empty in case the columns change
-                await axios.get('/api/employees')
-                    .then(response => {
-                        this.employees_data = response.data
-                        setTimeout(() => {
-                            $(document).ready(function(){
-                                document.getElementById("employeesDatatable").style.visibility = "visible";
-                                if (!($.fn.dataTable.isDataTable('#employeesDatatable'))) { // if datatable has not been initilized
-                                    $("#employeesDatatable").DataTable({
-                                        scrollCollapse: true,
-                                        "columnDefs": [
-                                            {targets: [6], orderable: false},
-                                            {targets: [6], width: "150px"}
-                                        ]
-                                    });
-                                }
-                                document.getElementById("employeeCard").style.visibility = "visible";
-                            });
-                        }, 0);
-                        this.retrieveAllStates();
-                    })
-                    .catch(error => {
-                        document.getElementById("employeeCard").style.visibility = "visible";
-                        console.log(error);
-                        this.employeeListError = error;
-                    })
-            },
-            addEmployee() {
-                $('#employeeFormModal').modal('show');
-            },
             handleSubmit() {
                 //this.handleSubmitClientErrors();  // commented this line out. Just would like to know how to handle all client validation errors in submit button
                 this.clearClientErrors();
@@ -370,8 +255,10 @@
 
 
                     .then(response => {
-                        this.closeModal();
-                        this.getEmployees();
+                        //document.location.href="{!! route('employeeList'); !!}";
+                        var baseurl = window.location.protocol + "//" + window.location.host;
+                        var url = baseurl + '/employees/list';
+                        document.location.href=url; 
                     }).catch(error => {
                         //console.log(error.response.status);
                         if (error.response.status == 422) {
@@ -384,12 +271,6 @@
                 this.resetFormData();
                 $("#img").val('');
                 //document.getElementById("img").value = '';
-            },
-            closeModal() {
-                this.clearFormData();
-                this.clearClientErrors();
-                this.clearServerErrors();
-                $('#employeeFormModal').modal('hide');
             },
             imageSelected(e){
                 /* There are two methods to pass the image file:
@@ -415,29 +296,13 @@
                     this.imagePreview = e.target.result;
                 };*/
             },
-            confirmDeleteEmployee(id) {
-                var result = confirm("Want to delete?");
-                if (result==true) {
-                    this.deleteEmployee(id);
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            deleteEmployee(id) {
-                axios.post('/api/employees/delete/' + id)
-                    .then(response => {
-                        this.getEmployees();
-                    }).catch(error => {
-                        console.log(error);
-                        this.clearFormData();
-                    })
-            },
             editEmployee(id) {
+                //alert(this.isEdit);
                 axios.get('/api/employees/edit/' + id)
                     .then(response => {
                         this.editing = true;
                         this.formData.id = response.data.id;
+                        //alert(this.formData.id);
                         this.formData.first_name = response.data.first_name;
                         this.formData.middle_name = response.data.middle_name;
                         this.formData.last_name = response.data.last_name;
@@ -454,13 +319,13 @@
                         this.formData.state = response.data.state;
                         this.formData.zip = response.data.zip;
                         this.formData.img = response.data.img;
-                        // https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-img-src
-                        this.imagePreview = new URL('/public/images/' + this.formData.img, import.meta.url);
-                        //alert(this.imagePreview);
+                        if (this.formData.img != null) {
+                            // https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-img-src
+                            this.imagePreview = new URL('/public/images/' + this.formData.img, import.meta.url);
+                            //alert(this.imagePreview);
+                        }
                         this.formData.start_date = response.data.start_date;
                         this.formData.end_date = response.data.end_date;
-
-                        $('#employeeFormModal').modal('show');
                     }).catch(error => {
                         console.log(error);
                     })

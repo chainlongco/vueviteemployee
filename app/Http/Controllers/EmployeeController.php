@@ -10,6 +10,10 @@ use Image;
 
 class EmployeeController extends Controller
 {
+    public function __invoke() {
+        return view('layouts.app');
+    }
+
     public function index() {
         $employees = Employee::all();
         return $employees;

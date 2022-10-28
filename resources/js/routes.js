@@ -1,5 +1,5 @@
 import ListEmployees from './components/employees/ListEmployees.vue';
-import CreateEmployee from './components/employees/CreateEmployee.vue';
+import CreateEditEmployee from './components/employees/CreateEditEmployee.vue';
 
 export default [
     {
@@ -10,6 +10,11 @@ export default [
     {
         path: '/employees/create',
         name: 'employees.create',
-        component: CreateEmployee,
+        component: CreateEditEmployee,
     },
+    {
+        path: "/employees/:id",
+        name: "employees.create",
+        component: CreateEditEmployee,
+    }
 ]
