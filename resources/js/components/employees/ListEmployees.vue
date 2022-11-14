@@ -94,7 +94,7 @@
                                 <label for="firstName">First Name</label>
                                 <!-- <input v-model="form.firstName" name="firstName" type="text" class="form-control" :class="{'is-invalid': errors.firstName }" id="firstName"
                                     aria-describedby="firstameHelp" placeholder="Enter first name" /> -->
-                                <input v-model="formData.first_name" name="firstName" type="text" class="form-control" id="firstName" @keydown="clearServerError('first_name')" @blur="validate('first_name')" @keypress="validate('first_name')"/>    
+                                <input v-model="formData.first_name" name="firstName" type="text" class="form-control" id="firstName" @keydown="clearServerError('first_name')" @blur="validate('first_name')" @keyup="validate('first_name')"/>    
                                 <span class="text-danger" v-if="hasServerError('first_name')">{{ getServerError('first_name') }}</span>
                                 <span class="text-danger" v-if="hasClientError('first_name')">{{ getClientError('first_name') }}</span>
                             </div>
@@ -104,7 +104,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="lastName">Last Name</label>
-                                <input v-model="formData.last_name" name="lastName" type="text" class="form-control" id="lastName" @keydown="clearServerError('last_name')" @blur="validate('last_name')" @keypress="validate('last_name')"/>
+                                <input v-model="formData.last_name" name="lastName" type="text" class="form-control" id="lastName" @keydown="clearServerError('last_name')" @blur="validate('last_name')" @keyup="validate('last_name')"/>
                                 <span class="text-danger" v-if="hasServerError('last_name')">{{ getServerError('last_name') }}</span>
                                 <span class="text-danger" v-if="hasClientError('last_name')">{{ getClientError('last_name') }}</span>
                             </div>
@@ -112,19 +112,19 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="email">Email</label>
-                                <input v-model="formData.email" name="email" type="email" class="form-control" id="email" @keydown="clearServerError('email')" @blur="validate('email')" @keypress="validate('email')"/>
+                                <input v-model="formData.email" name="email" type="email" class="form-control" id="email" @keydown="clearServerError('email')" @blur="validate('email')" @keyup="validate('email')"/>
                                 <span class="text-danger" v-if="hasServerError('email')">{{ getServerError('email') }}</span>
                                 <span class="text-danger" v-if="hasClientError('email')">{{ getClientError('email') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="phone">Phone</label>
-                                <input v-model="formData.phone" name="phone" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="phone" @keydown="clearServerError('phone')" @blur="validateAndFormatPhone" @keypress="validate('phone')"/>
+                                <input v-model="formData.phone" name="phone" type="text" onkeyup="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="phone" @keydown="clearServerError('phone')" @blur="validateAndFormatPhone" @keyup="validate('phone')"/>
                                 <span class="text-danger" v-if="hasServerError('phone')"> {{getServerError('phone')}}</span>
                                 <span class="text-danger" v-if="hasClientError('phone')">{{ getClientError('phone') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="birthday">Birthday</label>
-                                <input v-model="formData.birthday" name="birthday" type="date" class="form-control" id="birthday" @keydown="clearServerError('birthday')" @change="calendarChange('birthday')" @blur="validate('birthday')" @keypress="validate('birthday')"/>
+                                <input v-model="formData.birthday" name="birthday" type="date" class="form-control" id="birthday" @keydown="clearServerError('birthday')" @change="calendarChange('birthday')" @blur="validate('birthday')" @keyup="validate('birthday')"/>
                                 <span class="text-danger" v-if="hasServerError('birthday')">{{ getServerError('birthday') }}</span>
                                 <span class="text-danger" v-if="hasClientError('birthday')">{{ getClientError('birthday') }}</span>
                             </div>
@@ -132,14 +132,14 @@
                         <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="ssn">SSN</label>
-                                <input v-model="formData.ssn" name="ssn" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="ssn" @keydown="clearServerError('ssn')" @blur="validateAndFormatSSN" @keypress="validate('ssn')"/>
+                                <input v-model="formData.ssn" name="ssn" type="text" onkeyup="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="ssn" @keydown="clearServerError('ssn')" @blur="validateAndFormatSSN" @keyup="validate('ssn')"/>
                                 <span class="text-danger" v-if="hasServerError('ssn')">{{ getServerError('ssn') }}</span>
                                 <span class="text-danger" v-if="hasClientError('ssn')">{{ getClientError('ssn') }}</span>
                             </div>
                             <div class="col-md-3">
                                 <div>
                                     <p>Gender
-                                        <select v-model="formData.gender" id="gender" style="width: 100%; margin: 0px 0px; height: 37px; border: 1px solid #ced4da; border-radius: .375rem; padding: 0.375rem 0.75rem;" @keydown="clearServerError('gender')" @blur="validate('gender')" @keypress="validate('gender')">
+                                        <select v-model="formData.gender" id="gender" style="width: 100%; margin: 0px 0px; height: 37px; border: 1px solid #ced4da; border-radius: .375rem; padding: 0.375rem 0.75rem;" @keydown="clearServerError('gender')" @blur="validate('gender')" @keyup="validate('gender')">
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                             <option value="Other">Other</option>
@@ -151,13 +151,13 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="position">Position</label>
-                                <input v-model="formData.position" name="position" type="text" class="form-control" id="position" @keydown="clearServerError('position')" @blur="validate('position')" @keypress="validate('position')"/>
+                                <input v-model="formData.position" name="position" type="text" class="form-control" id="position" @keydown="clearServerError('position')" @blur="validate('position')" @keyup="validate('position')"/>
                                 <span class="text-danger" v-if="hasServerError('position')">{{ getServerError('position') }}</span>
                                 <span class="text-danger" v-if="hasClientError('position')">{{ getClientError('position') }}</span>
                             </div>
                             <div class="col-md-3">
                                 <label for="salary">Salary</label>
-                                <input v-model="formData.salary" name="salary" type="number" inputmode="decimal" step="0.01" class="form-control" id="salary" @keydown="clearServerError('salary')" @blur="validate('salary')" @keypress="validate('salary')"/>
+                                <input v-model="formData.salary" name="salary" type="number" inputmode="decimal" step="0.01" class="form-control" id="salary" @keydown="clearServerError('salary')" @blur="validate('salary')" @keyup="validate('salary')"/>
                                 <span class="text-danger" v-if="hasServerError('salary')">{{ getServerError('salary') }}</span>
                                 <span class="text-danger" v-if="hasClientError('salary')">{{ getClientError('salary') }}</span>
                             </div>
@@ -165,7 +165,7 @@
                         <div class="row mb-3">
                             <div class="col-md-7">
                                 <label for="address">Address</label>
-                                <input v-model="formData.address" name="address" type="text" class="form-control" id="address" @keydown="clearServerError('address')" @blur="validate('address')" @keypress="validate('address')"/>
+                                <input v-model="formData.address" name="address" type="text" class="form-control" id="address" @keydown="clearServerError('address')" @blur="validate('address')" @keyup="validate('address')"/>
                                 <span class="text-danger" v-if="hasServerError('address')">{{ getServerError('address') }}</span>
                                 <span class="text-danger" v-if="hasClientError('address')">{{ getClientError('address') }}</span>
                             </div>
@@ -177,13 +177,13 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="city">City</label>
-                                <input v-model="formData.city" name="city" type="text" class="form-control" id="city" @keydown="clearServerError('city')" @blur="validate('city')" @keypress="validate('city')"/>
+                                <input v-model="formData.city" name="city" type="text" class="form-control" id="city" @keydown="clearServerError('city')" @blur="validate('city')" @keyup="validate('city')"/>
                                 <span class="text-danger" v-if="hasServerError('city')">{{ getServerError('city') }}</span>
                                 <span class="text-danger" v-if="hasClientError('city')">{{ getClientError('city') }}</span>
                             </div>
                             <div class="col-md-4">
                                 <p>State
-                                    <select v-model="formData.state" id="state" style="width: 100%; margin: 0px 0px; height: 37px; border: 1px solid #ced4da; border-radius: .375rem; padding: 0.375rem 0.75rem;" @keydown="clearServerError('state')" @blur="validate('state')" @keypress="validate('state')">
+                                    <select v-model="formData.state" id="state" style="width: 100%; margin: 0px 0px; height: 37px; border: 1px solid #ced4da; border-radius: .375rem; padding: 0.375rem 0.75rem;" @keydown="clearServerError('state')" @blur="validate('state')" @keyup="validate('state')">
                                         <option v-for="(state, index) in states" :key="index" :selected="formData.state === state.abbrivation">{{ state.name }}</option>
                                     </select>
                                     <span class="text-danger" v-if="hasServerError('state')">{{ getServerError('state') }}</span>
@@ -192,7 +192,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="zip">Zip Code</label>
-                                <input v-model="formData.zip" name="zip" type="text" class="form-control" id="zip" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @keydown="clearServerError('zip')" @blur="validateAndFormatZipCode" @keypress="validate('zip')"/>
+                                <input v-model="formData.zip" name="zip" type="text" class="form-control" id="zip" onkeyup="return event.charCode >= 48 && event.charCode <= 57" @keydown="clearServerError('zip')" @blur="validateAndFormatZipCode" @keyup="validate('zip')"/>
                                 <span class="text-danger" v-if="hasServerError('zip')">{{ getServerError('zip') }}</span>
                                 <span class="text-danger" v-if="hasClientError('zip')">{{ getClientError('zip') }}</span>
                             </div>
@@ -200,7 +200,7 @@
                         <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="startDate">Hire Date</label>
-                                <input v-model="formData.start_date" name="startDate" type="date" class="form-control" id="startDate" @keydown="clearServerError('start_date')" @change="calendarChange('start_date')" @blur="validate('start_date')" @keypress="validate('start_date')"/>
+                                <input v-model="formData.start_date" name="startDate" type="date" class="form-control" id="startDate" @keydown="clearServerError('start_date')" @change="calendarChange('start_date')" @blur="validate('start_date')" @keyup="validate('start_date')"/>
                                 <span class="text-danger" v-if="hasServerError('start_date')">{{ getServerError('start_date') }}</span>
                                 <span class="text-danger" v-if="hasClientError('start_date')">{{ getClientError('start_date') }}</span>
                             </div>
@@ -247,7 +247,7 @@
     //import "datatables.net-dt/css/jquery.dataTables.min.css";
     //import axios from "axios";
     //import $ from "jquery";
-    import {reactive, ref} from 'vue'
+    //import {reactive, ref} from 'vue';
 
     const schema = yup.object().shape({
         first_name: yup.string()
@@ -434,7 +434,7 @@
                     })
             },
             editEmployee(id) {
-                axios.get('/api/employees/edit/' + id)
+                axios.get('//edit/' + id)
                     .then(response => {
                         this.editing = true;
                         this.formData.id = response.data.id;

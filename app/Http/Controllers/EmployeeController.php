@@ -11,7 +11,7 @@ use Image;
 class EmployeeController extends Controller
 {
     public function __invoke() {
-        return view('layouts.app');
+        return view('employees.index');
     }
 
     public function index() {
