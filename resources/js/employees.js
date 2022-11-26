@@ -3,8 +3,8 @@ import './bootstrap';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routesEmployees.js';
-import MenuWithRouterView from './App.vue';
-
+import MenuWithRouterView from './AppEmployees.vue';
+import store from './store/store.js';
 
 
 const app = createApp(MenuWithRouterView);
@@ -16,4 +16,5 @@ const router = createRouter({
 });
 
 app.use(router);
+app.use(store);
 app.mount('#app');

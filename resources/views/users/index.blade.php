@@ -30,6 +30,7 @@
     </head>
 
     <body>
+        <!--<input type="hidden" id="userId">-->
         <div id="app">
         </div>
     </body>

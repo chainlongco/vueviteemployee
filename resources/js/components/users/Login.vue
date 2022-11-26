@@ -57,6 +57,7 @@
     //import axios from 'axios';
     import * as yup from 'yup';
     import Form from '../form/Form.vue';
+    import { mapActions } from 'vuex';
 
     const schema = yup.object().shape({
         email: yup.string()
@@ -76,6 +77,10 @@
             }        
         },
         methods: {
+            ...mapActions({
+                signIn: 'auth/signIn'
+            }),
+
             validate(fieldName) {
                 this.clearServerError(fieldName);
                 this.clearServerLoginErrors();
@@ -87,7 +92,52 @@
                         this.clientErrors[err.path] = err.message;
                     });
             },
-            handleSubmit() {
+            async handleSubmit() {
+                this.clearClientErrors();
+                this.clearServerLoginErrors();
+
+                let data = new FormData;
+                data.append('email', this.formData.email);
+                data.append('password', this.formData.password);
+                let response = this.signIn(this.formData);  // from auth.js
+                let status = await (this.getSubmitStatus(response));
+                if (status == 2) {
+                    let user = await (this.getSubmitUser(response));
+                    //alert(user.name);
+                    var baseurl = window.location.protocol + "//" + window.location.host;
+                    var url = baseurl + '/employees/list';
+                    document.location.href=url;
+                } else if (status == 1 || status == 3) {
+                    let msg = await (this.getSubmitMessage(response));
+                    var message = "";
+                    message += '<div class="alert alert-danger">';
+                    message += msg;
+                    message += '</div>';
+                    $('#loginalert').html(message);
+                } else if (status == 0) {
+                    let error = await (this.getSubmitError(response));
+                    $.each(error, function(prefix, value) {
+                        $('span.' + prefix + '_error').text(value[0]);
+                    });
+                }               
+            },
+            async getSubmitStatus(response) {
+                const status = (await response).status;
+                return status;
+            },
+            async getSubmitUser(response) {
+                const user = (await response).user;
+                return user;
+            },
+            async getSubmitMessage(response) {
+                const message = (await response).msg;
+                return message;
+            },
+            async getSubmitError(response) {
+                const error = (await response).error;
+                return error;
+            },
+            handleSubmitBackup() {
                 this.clearClientErrors();
                 this.clearServerLoginErrors();
 

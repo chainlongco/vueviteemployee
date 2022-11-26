@@ -45,7 +45,7 @@
                             <td class="align-middle">
                                 <div class="row justify-content-around" style="margin:auto;">
                                     <!-- <a href="#" @click="editEmployee(employee.id)" class="col-md-5 btn btn-primary" title="Edit"><span class="bi-pencil-fill"></span></a> -->
-                                    <router-link :to="{ name: 'employees.create', params: {id: employee.id} }" class="col-md-5 btn btn-primary" style="float:right;"><span class="bi-pencil-fill"></span></router-link>
+                                    <router-link :to="{ name: 'employees.edit', params: {id: employee.id} }" class="col-md-5 btn btn-primary" style="float:right;"><span class="bi-pencil-fill"></span></router-link>
                                     <!-- <a href="#" @click="deleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete" onclick="if(!confirm('Are you sure?')){return false;}"><span class="bi-x-lg"></span></a> -->
                                     <a href="#" @click="confirmDeleteEmployee(employee.id)" class="col-md-5 btn btn-danger" title="Delete"><span class="bi-x-lg"></span></a>
                                 </div>

@@ -24,20 +24,24 @@ Route::get('/', function () {
 //    return view('layouts.header');
 //});
 
-Route::get('/api/employees', [EmployeeController::class, 'index']);
-Route::post('/api/employees', [EmployeeController::class, 'store']);
-//Route::get('/employees/list', EmployeeController::class)->name('employeeList');
-Route::post('/api/employees/delete/{id}', [EmployeeController::class, 'delete']);
-Route::get('/api/employees/edit/{id}', [EmployeeController::class, 'edit']);
+Route::group(['middleware' => 'isAuthorized'], function () {
+    Route::get('/api/employees', [EmployeeController::class, 'index']);
+    Route::post('/api/employees', [EmployeeController::class, 'store']);
+    //Route::get('/employees/list', EmployeeController::class)->name('employeeList');
+    Route::post('/api/employees/delete/{id}', [EmployeeController::class, 'delete']);
+    Route::get('/api/employees/edit/{id}', [EmployeeController::class, 'edit']);
 
-Route::get('employees/{vue?}', EmployeeController::class)->where('vue', '.*?');     // This line can resolve 404 error when click reload browser at http://localhost:8000/employees/create
-//Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
+    Route::get('employees/{vue?}', EmployeeController::class)->where('vue', '.*?');     // This line can resolve 404 error when click reload browser at http://localhost:8000/employees/create
+    //Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
+});
 
 Route::get('users/{vue?}', UserController::class)->where('vue', '.*?');
 /*Route::get('users/{vue?}', function () {
     return view('users.index');
 })->where('vue', '.*?');*/
 
-//Route::get('/users/login', [UserController::class, 'index']);
+//Route::get('/api/login', [UserController::class, 'index']);
+Route::get('/api/user/{id}', [UserController::class, 'retrieveUser']);
 Route::post('/api/login', [UserController::class, 'signin']);
+Route::get('/api/logout', [UserController::class, 'logout']);
 //Route::post('/login', [UserController::class, 'signin'])->name('login-submit');

@@ -29,7 +29,8 @@
 
     </head>
 
-    <body>    
+    <body>
+        <input type="hidden" id="userId" value="{{ ($user)? $user->id: "" }}">
         <div id="app">
         </div>
     </body>

@@ -1,6 +1,6 @@
-<template>   
+<template>
     <div class="card" id="employeeCard">
-        <div class="card-header text-center">
+        <div class="card-header text-center" v-if="checkEditOrNewEmployee">
             <h3>
                 <span v-if="isEdit">Edit Employee</span>
                 <span v-else>Add New Employee</span>
@@ -206,21 +206,47 @@
                 imagePreview: null,
                 image: null,
                 states: [],
-                isEdit: false,
+                //isEdit: false,
             }        
         },
+        props: {
+           isEdit: false,
+        },
         created() {
+            //alert('created: ' + this.$route.params.id);
+        },
+        unmounted() {
+            //alert('unmounted: ' + this.$route.params.id);
+        },
+        actived() {
+            //alert('actived: ' + this.$route.params.id);
+        },
+        deactived() {
+            //alert('deactived: ' + this.$route.params.id);
+        },
+        computed: {
+            //alert('computed: ' + this.route.params.id);
+            checkEditOrNewEmployee(){
+                if (this.isEdit == true) {
+                    if (!Number.isNaN(this.$route.params.id * 1)) {
+                        //alert('go edit employee');
+                        this.editEmployee(this.$route.params.id);
+                    }
+                } else {
+                    this.$route.params.id = null;
+                    //this.$router.replace({'query': null});
+                    //this.$router.replace({'query': null});
+                    //alert('id: ' + this.$route.params.id);
+                    this.clearFormData();
+                }
+                return true;
+            }
+        },
+        beforeUpdated() {
+            //alert('beforeUpdated: ' + this.route.params.id);
         },
         mounted() {
             this.retrieveAllStates();
-            //alert(this.$route.params.id);
-            if (!Number.isNaN(this.$route.params.id * 1)) {
-                //alert('inside: ' + this.$route.params.id);
-                this.isEdit = true;
-                this.editEmployee(this.$route.params.id);
-            } else {
-                this.isEdit = false;
-            }
         },
         methods: {
             handleSubmit() {

@@ -6,12 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Image;
 
 class EmployeeController extends Controller
 {
     public function __invoke() {
-        return view('employees.index');
+        $user = null;
+        if (Session::has('user')) {
+            $user = Session::get('user');   
+        }
+        return view('employees.index', compact('user'));
     }
 
     public function index() {

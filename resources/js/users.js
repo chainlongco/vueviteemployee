@@ -1,10 +1,10 @@
 import './bootstrap';
 
 import { createApp } from 'vue';
-import Vuex from "vuex";
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routesUsers.js';
-import MenuWithRouterView from './App.vue';
+import MenuWithRouterView from './AppUsers.vue';
+import store from './store/store.js';
 
 const app = createApp(MenuWithRouterView);
 //const app = createApp({});
@@ -14,5 +14,6 @@ const router = createRouter({
     history: createWebHistory(),
 });
 
-app.use(router, Vuex);
+app.use(router);
+app.use(store);
 app.mount('#app');
