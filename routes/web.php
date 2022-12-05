@@ -33,6 +33,9 @@ Route::group(['middleware' => 'isAuthorized'], function () {
 
     Route::get('employees/{vue?}', EmployeeController::class)->where('vue', '.*?');     // This line can resolve 404 error when click reload browser at http://localhost:8000/employees/create
     //Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
+    Route::get('api/usersWithRoles', [UserController::class, 'listUsersWithRoles']);
+    Route::post('/api/users/delete/{id}', [UserController::class, 'userDelete']);
+    Route::post('/api/users/edit', [UserController::class, 'userEdit']);
 });
 
 Route::get('users/{vue?}', UserController::class)->where('vue', '.*?');
@@ -45,3 +48,4 @@ Route::get('/api/user/{id}', [UserController::class, 'retrieveUser']);
 Route::post('/api/login', [UserController::class, 'signin']);
 Route::get('/api/logout', [UserController::class, 'logout']);
 //Route::post('/login', [UserController::class, 'signin'])->name('login-submit');
+Route::post('/api/signup', [UserController::class, 'signup']);

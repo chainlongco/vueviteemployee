@@ -83,7 +83,7 @@
 
             validate(fieldName) {
                 this.clearServerError(fieldName);
-                this.clearServerLoginErrors();
+                this.clearUsersServerErrors();
                 schema.validateAt(fieldName, this.formData)
                     .then(() => {
                         this.clearClientError(fieldName);
@@ -94,7 +94,7 @@
             },
             async handleSubmit() {
                 this.clearClientErrors();
-                this.clearServerLoginErrors();
+                this.clearUsersServerErrors();
 
                 let data = new FormData;
                 data.append('email', this.formData.email);
@@ -139,7 +139,7 @@
             },
             handleSubmitBackup() {
                 this.clearClientErrors();
-                this.clearServerLoginErrors();
+                this.clearUsersServerErrors();
 
                 let data = new FormData;
                 data.append('email', this.formData.email);
@@ -170,9 +170,9 @@
                         }
                     })
             },
-            clearServerLoginErrors() {
-                $(document).find('span.error-text').text('');
-            }
+            //clearUsersServerErrors() {
+            //    $(document).find('span.error-text').text('');
+            //}
         },
     }
 </script>

@@ -32,6 +32,10 @@
                             </a>
                             <ul class="collapse show nav flex-column ms-1" id="submenu0" data-bs-parent="#menu">
                                 <li>
+                                    <router-link to="/employees/listusers" class="nav-link px-0"> <span class="d-none d-sm-inline"></span>List</router-link>
+                                    <!--<a class="nav-link px-0" href="/api/logout">Logout</a>-->
+                                </li>
+                                <li>
                                     <!--<router-link to="/users/register" class="nav-link px-0"> <span class="d-none d-sm-inline"></span>Register</router-link>-->
                                     <a class="nav-link px-0" href="/api/logout">Logout</a>
                                 </li>

@@ -46,7 +46,9 @@
                 }
                 return "";    
             },
-            
+            clearUsersServerErrors() {
+                $(document).find('span.error-text').text('');
+            }
         },
     }
 </script>
