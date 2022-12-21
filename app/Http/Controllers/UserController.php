@@ -15,51 +15,9 @@ class UserController extends Controller
         return view('users.index');
     }
 
-    public function restricted() {
-        //return view('users.restricted');
-        return redirct('/users/restricted');
-    }
-
-    public function index() {
-        $user = User::all();
-        return $user;
-    }
-
     public function listUsersWithRoles() {
-        //$user = User::all();
-       // return $user;
-        //$users = DB::table('users')->join('contacts', 'users.id', '=', 'contacts.user_id') ->join('orders', 'users.id', '=', 'orders.user_id') ->select('users.*', 'contacts.phone', 'orders.//price')->get();
-
-        $query = DB::raw("(CASE WHEN user_group='1' THEN 'Admin' WHEN user_group='2' THEN 'User' ELSE 'Superadmin' END) as name");
-        //$query1 = DB::raw(IF('$loggedInUser->role' = 'admin', attendance.total, NULL) as total_attendance);
-        $admin = DB::table('users')->select('users.*', DB::raw('true as admin'))->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')->where('role_users.role_id', '=', 1)->get();
-        $manager = DB::table('users')->select('users.*', DB::raw('true as admin'))->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')->where('role_users.role_id', '=', 2)->get();
-        $employee = DB::table('users')->select('users.*', DB::raw('true as admin'))->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')->where('role_users.role_id', '=', 3)->get();
-        //$users = DB::table('users')->select('users.*', 'role_users.role_id as admin', DB::raw("IF('users.id'>1, true, false) as admin"))->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')->get();
-
-        //$users = DB::table('users')->select('users.*', 'role_users.role_id as admin')->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')->groupBy('users.id')->get();
-        //return $users;
-
-        //$users = DB::table('users')->select('users.*', 'role_users.role_id as role')->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')->get();
-        //return $users;
-
-
-        //select *, EXISTS (SELECT * FROM users aa left join `role_users` on aa.id = role_users.user_id where role_users.role_id=1 and aa.id=oo.id) as admin, EXISTS (SELECT * FROM users aa left join `role_users` on aa.id = role_users.user_id where role_users.role_id=2 and aa.id=oo.id) as manager, EXISTS (SELECT * FROM users aa left join `role_users` on aa.id = role_users.user_id where role_users.role_id=3 and aa.id=oo.id) as employee from users oo
-
-        //$queryAdmin = DB::raw(EXISTS (SELECT * FROM users left join `role_users` on users.id = role_users.user_id where role_users.role_id=1) as admin);
-        //$queryAdmin = DB::raw();
-        //$queryAdmin = DB::select( DB::raw("SELECT * FROM some_table WHERE some_col = '$someVariable'") );
-        //$users = DB::table('users as oo')->select('oo.id as admin', 'oo.*')->get();
-        //$users = DB::table('users as oo')->select('oo.name as admin', 'oo.*')->get();
         $users = DB::select('select oo.*, EXISTS (SELECT * FROM users aa left join `role_users` on aa.id = role_users.user_id where role_users.role_id=1 and aa.id=oo.id) as admin, EXISTS (SELECT * FROM users aa left join `role_users` on aa.id = role_users.user_id where role_users.role_id=2 and aa.id=oo.id) as manager, EXISTS (SELECT * FROM users aa left join `role_users` on aa.id = role_users.user_id where role_users.role_id=3 and aa.id=oo.id) as employee from users oo');
         return $users;
-       
-
-        //$users = DB::table('sizes')->crossJoin('colours')->get();
-
-        //DB::table('users')->join('contacts', function ($join) { $join->on('users.id', '=', 'contacts.user_id')->orOn(...); })->get();
-
-        //DB::table('users')->join('contacts', function ($join) { $join->on('users.id', '=', 'contacts.user_id') ->where('contacts.user_id', '>', 5);})->get();
     }
 
     public function logout() {

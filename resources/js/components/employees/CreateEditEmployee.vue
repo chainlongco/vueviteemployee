@@ -9,7 +9,7 @@
             <!-- <h3>Add New Employee<router-link :to="{ name: 'employees.list' }" class="btn btn-primary" style="float:right;">Employee List</router-link></h3> -->
         </div>
         <div class="card-body">
-            <div class="">
+            <div>
                 <form enctype="multipart/form-data">
                     <div class="">
                         <input v-model="formData.id" class="form-control" type="hidden"/>
@@ -21,6 +21,7 @@
                                 <input v-model="formData.first_name" name="firstName" type="text" class="form-control" id="firstName" @keydown="clearServerError('first_name')" @blur="validate('first_name')" @keyup="validate('first_name')"/>    
                                 <span class="text-danger" v-if="hasServerError('first_name')">{{ getServerError('first_name') }}</span>
                                 <span class="text-danger" v-if="hasClientError('first_name')">{{ getClientError('first_name') }}</span>
+                                <span class="text-danger error-text first_name_error"></span>
                             </div>
                             <div class="col-md-4">
                                 <label for="middleName">Middle Name</label>
@@ -31,6 +32,7 @@
                                 <input v-model="formData.last_name" name="lastName" type="text" class="form-control" id="lastName" @keydown="clearServerError('last_name')" @blur="validate('last_name')" @keyup="validate('last_name')"/>
                                 <span class="text-danger" v-if="hasServerError('last_name')">{{ getServerError('last_name') }}</span>
                                 <span class="text-danger" v-if="hasClientError('last_name')">{{ getClientError('last_name') }}</span>
+                                <span class="text-danger error-text last_name_error"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -39,18 +41,21 @@
                                 <input v-model="formData.email" name="email" type="email" class="form-control" id="email" @keydown="clearServerError('email')" @blur="validate('email')" @keyup="validate('email')"/>
                                 <span class="text-danger" v-if="hasServerError('email')">{{ getServerError('email') }}</span>
                                 <span class="text-danger" v-if="hasClientError('email')">{{ getClientError('email') }}</span>
+                                <span class="text-danger error-text email_error"></span>
                             </div>
                             <div class="col-md-4">
                                 <label for="phone">Phone</label>
                                 <input v-model="formData.phone" name="phone" type="text" onkeyup="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="phone" @keydown="clearServerError('phone')" @blur="validateAndFormatPhone" @keyup="validate('phone')"/>
                                 <span class="text-danger" v-if="hasServerError('phone')"> {{getServerError('phone')}}</span>
                                 <span class="text-danger" v-if="hasClientError('phone')">{{ getClientError('phone') }}</span>
+                                <span class="text-danger error-text phone_error"></span>
                             </div>
                             <div class="col-md-4">
                                 <label for="birthday">Birthday</label>
                                 <input v-model="formData.birthday" name="birthday" type="date" class="form-control" id="birthday" @keydown="clearServerError('birthday')" @change="calendarChange('birthday')" @blur="validate('birthday')" @keyup="validate('birthday')"/>
                                 <span class="text-danger" v-if="hasServerError('birthday')">{{ getServerError('birthday') }}</span>
                                 <span class="text-danger" v-if="hasClientError('birthday')">{{ getClientError('birthday') }}</span>
+                                <span class="text-danger error-text birthday_error"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -59,6 +64,7 @@
                                 <input v-model="formData.ssn" name="ssn" type="text" onkeyup="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" class="form-control" id="ssn" @keydown="clearServerError('ssn')" @blur="validateAndFormatSSN" @keyup="validate('ssn')"/>
                                 <span class="text-danger" v-if="hasServerError('ssn')">{{ getServerError('ssn') }}</span>
                                 <span class="text-danger" v-if="hasClientError('ssn')">{{ getClientError('ssn') }}</span>
+                                <span class="text-danger error-text ssn_error"></span>
                             </div>
                             <div class="col-md-3">
                                 <div>
@@ -70,6 +76,7 @@
                                         </select>
                                         <span class="text-danger" v-if="hasServerError('gender')">{{ getServerError('gender') }}</span>
                                         <span class="text-danger" v-if="hasClientError('gender')">{{ getClientError('gender') }}</span>
+                                        <span class="text-danger error-text gender_error"></span>
                                     </p>
                                 </div>
                             </div>
@@ -78,12 +85,14 @@
                                 <input v-model="formData.position" name="position" type="text" class="form-control" id="position" @keydown="clearServerError('position')" @blur="validate('position')" @keyup="validate('position')"/>
                                 <span class="text-danger" v-if="hasServerError('position')">{{ getServerError('position') }}</span>
                                 <span class="text-danger" v-if="hasClientError('position')">{{ getClientError('position') }}</span>
+                                <span class="text-danger error-text position_error"></span>
                             </div>
                             <div class="col-md-3">
                                 <label for="salary">Salary</label>
                                 <input v-model="formData.salary" name="salary" type="number" inputmode="decimal" step="0.01" class="form-control" id="salary" @keydown="clearServerError('salary')" @blur="validate('salary')" @keyup="validate('salary')"/>
                                 <span class="text-danger" v-if="hasServerError('salary')">{{ getServerError('salary') }}</span>
                                 <span class="text-danger" v-if="hasClientError('salary')">{{ getClientError('salary') }}</span>
+                                <span class="text-danger error-text salary_error"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -92,6 +101,7 @@
                                 <input v-model="formData.address" name="address" type="text" class="form-control" id="address" @keydown="clearServerError('address')" @blur="validate('address')" @keyup="validate('address')"/>
                                 <span class="text-danger" v-if="hasServerError('address')">{{ getServerError('address') }}</span>
                                 <span class="text-danger" v-if="hasClientError('address')">{{ getClientError('address') }}</span>
+                                <span class="text-danger error-text address_error"></span>
                             </div>
                             <div class="col-md-5">
                                 <label for="address2">Address2</label>
@@ -104,6 +114,7 @@
                                 <input v-model="formData.city" name="city" type="text" class="form-control" id="city" @keydown="clearServerError('city')" @blur="validate('city')" @keyup="validate('city')"/>
                                 <span class="text-danger" v-if="hasServerError('city')">{{ getServerError('city') }}</span>
                                 <span class="text-danger" v-if="hasClientError('city')">{{ getClientError('city') }}</span>
+                                <span class="text-danger error-text city_error"></span>
                             </div>
                             <div class="col-md-4">
                                 <p>State
@@ -112,6 +123,7 @@
                                     </select>
                                     <span class="text-danger" v-if="hasServerError('state')">{{ getServerError('state') }}</span>
                                     <span class="text-danger" v-if="hasClientError('state')">{{ getClientError('state') }}</span>
+                                    <span class="text-danger error-text state_error"></span>
                                 </p>    
                             </div>
                             <div class="col-md-4">
@@ -119,6 +131,7 @@
                                 <input v-model="formData.zip" name="zip" type="text" class="form-control" id="zip" onkeyup="return event.charCode >= 48 && event.charCode <= 57" @keydown="clearServerError('zip')" @blur="validateAndFormatZipCode" @keyup="validate('zip')"/>
                                 <span class="text-danger" v-if="hasServerError('zip')">{{ getServerError('zip') }}</span>
                                 <span class="text-danger" v-if="hasClientError('zip')">{{ getClientError('zip') }}</span>
+                                <span class="text-danger error-text zip_error"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -127,6 +140,7 @@
                                 <input v-model="formData.start_date" name="startDate" type="date" class="form-control" id="startDate" @keydown="clearServerError('start_date')" @change="calendarChange('start_date')" @blur="validate('start_date')" @keyup="validate('start_date')"/>
                                 <span class="text-danger" v-if="hasServerError('start_date')">{{ getServerError('start_date') }}</span>
                                 <span class="text-danger" v-if="hasClientError('start_date')">{{ getClientError('start_date') }}</span>
+                                <span class="text-danger error-text start_date_error"></span>
                             </div>
                             <div class="col-md-3">
                                 <label for="endDate">Date Leave</label>
@@ -249,13 +263,14 @@
             this.retrieveAllStates();
         },
         methods: {
-            handleSubmit() {
+            async handleSubmit() {
                 //this.handleSubmitClientErrors();  // commented this line out. This method is to handle all client validation errors together in submit button
                 this.clearClientErrors();
+                this.clearUsersOrEmployeesServerErrors();
 
-                // Method 1 (Passing image as an object):
+                // Method 1 (Passing img as an object):
                 let data = new FormData;
-                data.append('image', this.image);
+                data.append('img', this.image);
                 data.append('id', this.formData.id);
                 data.append('first_name', this.formData.first_name);
                 data.append('middle_name', this.formData.middle_name);
@@ -274,13 +289,13 @@
                 data.append('zip', this.formData.zip);
                 data.append('start_date', this.formData.start_date);
                 data.append('end_date', this.formData.end_date);
-                axios.post('/api/employees', data)
+                let response = await axios.post('/api/employees', data);
 
                 // Method 2 (Passing img as a string): 
                 //axios.post('/api/employees', this.formData)
 
 
-                    .then(response => {
+                    /*.then(response => {
                         //document.location.href="{!! route('employeeList'); !!}";
                         var baseurl = window.location.protocol + "//" + window.location.host;
                         var url = baseurl + '/employees/list';
@@ -291,7 +306,32 @@
                             this.serverErrors = error.response.data.errors;
                         }
                         //this.clearFormData();
-                    })
+                    })*/
+                    let status = await (this.getSubmitStatus(response));
+                    alert(status);
+                    if (status == 1) {
+                        var baseurl = window.location.protocol + "//" + window.location.host;
+                        var url = baseurl + '/employees/list';
+                        document.location.href=url;
+                    } else if (status == 0) {
+                        let error = response.data.error;
+                        $.each(error, function(prefix, value) {
+                            $('span.' + prefix + '_error').text(value[0]);
+                        });
+                    }
+
+            },
+            async getSubmitStatus(response) {
+                const status = (await response.data).status;
+                return status;
+            },
+            async getSubmitMessage(response) {
+                const message = (await response.data).msg;
+                return message;
+            },
+            async getSubmitError(response) {
+                const error = (await response.data).error;
+                return error;
             },
             clearFormData() {
                 this.resetFormData();
@@ -336,7 +376,11 @@
                         this.formData.phone = response.data.phone;
                         this.formData.birthday = response.data.birthday;
                         this.formData.ssn = response.data.ssn;
-                        this.formData.gender = response.data.gender;
+                        if ((response.data.gender != 'Male') && (response.data.gender != 'Female') && (response.data.gender != 'Other')) {
+                            this.formData.gender = '';
+                        } else {
+                            this.formData.gender = response.data.gender;
+                        }
                         this.formData.position = response.data.position;
                         this.formData.salary = response.data.salary;
                         this.formData.address = response.data.address;

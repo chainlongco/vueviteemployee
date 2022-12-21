@@ -87,7 +87,7 @@
             },
             async handleSubmit() {
                 this.clearClientErrors();
-                this.clearUsersServerErrors();
+                this.clearUsersOrEmployeesServerErrors();
 
                 let data = new FormData;
                 data.append('name', this.formData.name);

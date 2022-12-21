@@ -46,7 +46,7 @@
                 }
                 return "";    
             },
-            clearUsersServerErrors() {
+            clearUsersOrEmployeesServerErrors() {
                 $(document).find('span.error-text').text('');
             }
         },

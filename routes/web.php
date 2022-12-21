@@ -26,7 +26,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'isAuthorized'], function () {
     Route::get('/api/employees', [EmployeeController::class, 'index']);
-    Route::post('/api/employees', [EmployeeController::class, 'store']);
+    Route::post('/api/employees', [EmployeeController::class, 'store'])->name('store-employee');
     //Route::get('/employees/list', EmployeeController::class)->name('employeeList');
     Route::post('/api/employees/delete/{id}', [EmployeeController::class, 'delete']);
     Route::get('/api/employees/edit/{id}', [EmployeeController::class, 'edit']);

@@ -5,6 +5,8 @@
             <h3>Employees Information<router-link :to="{ name: 'employees.create', params: {id: 'create'} }" class="btn btn-primary" style="float:right;">Add New Employee</router-link></h3>
         </div>
         <div class="card-body">
+            <div id="employeealert">
+            </div>
             <h5 class="text-danger" v-if="employeeListError">{{ employeeListError }}</h5>
             <div class='table-responsive'> <!-- to solve Jquery Datatables issue when resizing - columns not lineup, 
                 https://stackoverflow.com/questions/61557675/jquery-datatables-issue-when-resizing-->
@@ -427,11 +429,41 @@
             deleteEmployee(id) {
                 axios.post('/api/employees/delete/' + id)
                     .then(response => {
+                        let status = response.data.status;
+                        //alert(status);
+                        if (status == 0 || status == 1) {
+                            let msg = response.data.msg;
+                            var message = "";
+                            message += '<div class="alert alert-danger">';
+                            message += msg;
+                            message += '</div>';
+                            $('#employeealert').html(message);
+                        } else if (status == 2) {
+                            let msg = response.data.msg;
+                            var message = "";
+                            message += '<div class="alert alert-success">';
+                            message += msg;
+                            message += '</div>';
+                            $('#employeealert').html(message);
+                        }
+                        this.showText();
                         this.getEmployees();
                     }).catch(error => {
                         console.log(error);
+                        let msg = error.message + ', please contact system adminstrator.';
+                        var message = "";
+                        message += '<div class="alert alert-danger">';
+                        message += msg;
+                        message += '</div>';
+                        $('#employeealert').html(message);
+                        this.showText();
                         this.clearFormData();
                     })
+            },
+            showText() {
+                setTimeout(() => {
+                    $('#employeealert').html('');
+                }, 8000)
             },
             editEmployee(id) {
                 axios.get('//edit/' + id)
@@ -547,7 +579,7 @@
                 //alert(this.states.length);
                 //alert(this.states[0]['abbreviation']);
                 //alert(this.states[0]['name']);
-            }
+            },
         }
     }
 </script>

@@ -19,7 +19,8 @@ class isAuthorized
     public function handle(Request $request, Closure $next)
     {
         if (Session::has('user')) {
-            $user = Session::get('user');
+            // Admin and Manager have been verified in isAuthorizedUser of UserController.php
+            /*$user = Session::get('user');
             $roles = DB::table('roles')
                 ->select('name')
                 ->join('role_users', 'role_id', '=', 'roles.id')
@@ -30,7 +31,8 @@ class isAuthorized
                     return $next($request);
                 }
             }
-            return redirect('users/restricted');
+            return redirect('users/restricted');*/
+            return $next($request);
         } else {
             return redirect('users/restricted');
         }

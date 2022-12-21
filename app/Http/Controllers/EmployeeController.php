@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Image;
+use Exception;
+use Validator;
 
 class EmployeeController extends Controller
 {
@@ -25,7 +27,7 @@ class EmployeeController extends Controller
     }
 
     public function store(Request $request) {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required|min:2',
             'last_name' => 'required',
             'email' => 'required|email|min:15',
@@ -40,94 +42,63 @@ class EmployeeController extends Controller
             'state' => 'required',
             'zip' => 'required',
             'start_date' => 'required',
-        ]);
-        //$dd($request->all());
-        /*return Employee::create([
-            'first_name' => "$request("firstName")",
-            'middle_name' => $request("middleName"),
-            'last_name' => $request("lastName"),
-        ]);*/
-        /*$data = $request->all();
-        $response = Employee::create($data);
-        return response()->json([
-            'status' => 'success',
-            'data' => $response
-        ], 200);*/
+        ],
+        [
+            'start_date.required'=> 'The hire date field is required.', // custom message
+        ]
+        );
 
-        /*$response = Employee::create([
-            'first_name' => "Jacky",
-            'middle_name' => "JS",
-            'last_name' => "Shyu",
-            'email' => "shyujacky@yahoo.com",
-            'phone' => "1234567897",
-            'birthday' => "1967-01-01",
-            'ssn' => "123456789",
-            'gender' => "M",
-            'position' => "Manager",
-            'salary' => "1000",
-            'address' => "5003 Laurel Springs",
-            'address2' => "Suite 100",
-            'city' => "Dallas",
-            'state' => "TX",
-            'zip' => "76033",
-            'img' => "123456",
-            'start_date' => "2002-01-01",
-            'edate_date' => "2080-01-01"
+        // I do not know how to test this way. So, I user the way above.
+        /*$this->validate($request, [
+            'first_name' => 'required|min:2',
+            'last_name' => 'required',
+            'email' => 'required|email|min:15',
+            'phone' => 'required',
+            'birthday' => 'required',
+            'ssn' => 'required',
+            'gender' => 'required',
+            'position' => 'required',
+            'salary' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
+            'start_date' => 'required',
         ]);*/
 
-        // Method 1 (Passing image as an object):
-        $image = null;
-        if ((!is_string($request->image)) && ($request->image != null)) {
-            $image = time().'.'.$request->image->extension();
-        }
-        //$request->image->move(public_path('images'), $image);
-
-        // Method 2 (Passing img as a string):
-        /*if($request->img) {
-            $image = time() . '.' . explode('/', explode(':', substr($request->img, 0, strpos($request->img, ';')))[1])[1];
-            //Image::make($request->img)->save(public_path('images/' . $image));
-        }else{
-            $image = null;
-        }*/
-
-    
-        /*$image = $request->file('img');
-        $imageName = $image->getClientOriginalName();
-        $imageName = time().'_'.$imageName;
-        $image->move(public_path('/images'), $imageName);
-
-        if ($request->img) {
-            $image = $this.handleImage($request);
-        }*/
-        $oldImageName = '';
-        if ($request->id != '') {
-            //$employee = DB::table('employees')->where('id', $request->id);
-            $employee = Employee::find($request->id);
-            if ($employee->first()->img) {
-                $oldImageName = $employee->first()->img;
+        if ($validator->passes()) {
+            // Method 1 (Passing img as an object):
+            $img = null;
+            if ((!is_string($request->img)) && ($request->img != null)) {
+                //$img = time().'.'.$request->img->extension();
+                $img = $this->retrieveRandomImageName($request);
             }
-            /*$response = $employee
-                ->update([
-                    'first_name' => $request->first_name,
-                    'middle_name' => $request->middle_name,
-                    'last_name' => $request->last_name,
-                    'email' => $request->email,
-                    'phone' => $request->phone,
-                    'birthday' => $request->birthday,
-                    'ssn' => $request->ssn,
-                    'gender' => $request->gender,
-                    'position' => $request->position,
-                    'salary' => $request->salary,
-                    'address' => $request->address,
-                    'address2' => $request->address2,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'zip' => $request->zip,
-                    'img' => $image,
-                    'start_date' => $request->start_date,
-                    'end_date' => $request->end_date
-                ]);*/
+            //$request->img->move(public_path('images'), $img);
 
+            // Method 2 (Passing img as a string):
+            /*if($request->img) {
+                $img = time() . '.' . explode('/', explode(':', substr($request->img, 0, strpos($request->img, ';')))[1])[1];
+                //Image::make($request->img)->save(public_path('images/' . $img));
+            }else{
+                $img = null;
+            }*/
+
+        
+            /*$img = $request->file('img');
+            $imageName = $img->getClientOriginalName();
+            $imageName = time().'_'.$imageName;
+            $img->move(public_path('/images'), $imageName);
+
+            if ($request->img) {
+                $img = $this.handleImage($request);
+            }*/
+            $oldImageName = '';
+            if ($request->id != '') {
+                //$employee = DB::table('employees')->where('id', $request->id);
+                $employee = Employee::find($request->id);
+                if ($employee->first()->img) {
+                    $oldImageName = $employee->first()->img;
+                }
                 $employee->first_name = $request->first_name;
                 $employee->middle_name = $request->middle_name;
                 $employee->last_name = $request->last_name;
@@ -143,44 +114,50 @@ class EmployeeController extends Controller
                 $employee->city = $request->city;
                 $employee->state = $request->state;
                 $employee->zip = $request->zip;
-                if ($image) {
-                    $employee->img = $image;
+                if ($img) {
+                    $employee->img = $img;
                 }
                 $employee->start_date = $request->start_date;
                 $employee->end_date = $request->end_date;
                 $response = $employee->save();
-        } else {
-            $response = Employee::create([
-                'first_name' => $request->first_name,
-                'middle_name' => $request->middle_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'birthday' => $request->birthday,
-                'ssn' => $request->ssn,
-                'gender' => $request->gender,
-                'position' => $request->position,
-                'salary' => $request->salary,
-                'address' => $request->address,
-                'address2' => $request->address2,
-                'city' => $request->city,
-                'state' => $request->state,
-                'zip' => $request->zip,
-                'img' => $image,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date
-            ]);
+            } else {
+                $response = Employee::create([
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'birthday' => $request->birthday,
+                    'ssn' => $request->ssn,
+                    'gender' => $request->gender,
+                    'position' => $request->position,
+                    'salary' => $request->salary,
+                    'address' => $request->address,
+                    'address2' => $request->address2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'zip' => $request->zip,
+                    'img' => $img,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date
+                ]);
+            }
+            if ($response && $img) {
+                $this->handleImage($request, $img, $oldImageName);
+            };
+            return response()->json([
+                'status' => 1,
+                'data' => $response
+            ], 200);
         }
-        if ($response && $image) {
-            $this->handleImage($request, $image, $oldImageName);
-        };
-        return response()->json([
-            'status' => 'success',
-            'data' => $response
-        ], 200);
+        return response()->json(['status'=>0, 'error'=>$validator->errors()->toArray()]);
     }
 
-    private function handleImage(Request $request, String $imageName, String $oldImageName) {
+    protected function retrieveRandomImageName($request) {
+        return time().'.'.$request->img->extension();
+    }
+
+    protected function handleImage(Request $request, String $imageName, String $oldImageName) {
         /*$this->validate($request,[
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);*/
@@ -212,10 +189,10 @@ class EmployeeController extends Controller
         //return 'images/' .$imageName;
 
         // Method 1 (Passing image as an object):
-        $image = $request->file('image');
-        //$image->move(public_path('/images'), $imageName); // I can use this directly, but if size is too big, this will cause error. So, I need to resize it first.
+        $img = $request->file('img');
+        //$img->move(public_path('/images'), $imageName); // I can use this directly, but if size is too big, this will cause error. So, I need to resize it first.
         $filePath = public_path('/images');
-        $img = Image::make($image->path());
+        $img = Image::make($img->path());
         $img->resize(100, 100, function ($const) {
             $const->aspectRatio();
         })->save($filePath.'/'.$imageName);
@@ -233,19 +210,32 @@ class EmployeeController extends Controller
     }
 
     public function delete($id) {
-        $employee = DB::table('employees')->where('id', $id);
-        $imageName = $employee->first()->img;
-        $response = $employee->delete();
-        if ($response) {
-            if ($imageName) {
-                File::delete([
-                    public_path('/images/' .$imageName)
-                ]);
+        try {
+            $employee = DB::table('employees')->where('id', $id);
+            if ($employee->first()) {
+                $imageName = $employee->first()->img;
+                $fullName = $employee->first()->first_name .' ' .$employee->first()->last_name;
+                $response = $this->deleteEmployee($employee);
+                if ($response) {
+                    if ($imageName) {
+                        File::delete([
+                            public_path('/images/' .$imageName)
+                        ]);
+                    }
+                    $message = 'Employee: ' .$fullName .' has been deleted successfully!'; 
+                    return response()->json(['status'=>2, 'msg'=>$message]);
+                }
+            } else {
+                return response()->json(['status'=>0, 'msg'=>'Sorry, employee not found']);
             }
-            return response()->json('Employee deleted successfully!');
-        } else {
-            return response()->json('Sorry, employee cannot be deleted');
-        }
+        } catch (Exception $e) {
+            $message = 'Sorry, employee cannot be deleted: ' .$e->getMessage();
+            return response()->json(['status'=>1, 'msg'=>$message]);
+        } 
+    }
+
+    public function deleteEmployee($employee) {
+        return $employee->delete();
     }
 
     public function edit($id) {
@@ -267,9 +257,7 @@ class EmployeeController extends Controller
             'city'=>$employee->city,
             'state'=>$employee->state,
             'zip'=>$employee->zip,
-            //'img'=>'file:/' .public_path('images/' .$employee->img),
             'img'=>$employee->img,
-            //'img'=>('images/' .$employee->img),
             'start_date'=>$employee->start_date,
             'end_date'=>$employee->end_date,
         ]);

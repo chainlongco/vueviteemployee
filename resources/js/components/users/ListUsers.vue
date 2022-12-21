@@ -139,13 +139,13 @@
                 return message;
             },
             async editUser(id) {
-                alert('id: ' + id);
+                //alert('id: ' + id);
                 var admin = $('#roleadmin' + id).is(":checked");
-                alert('admin: ' + admin);
+                //alert('admin: ' + admin);
                 var manager = $('#rolemanager' + id).is(":checked");
-                alert('manager: ' + manager);
+                //alert('manager: ' + manager);
                 var employee = $('#roleemployee' + id).is(":checked");
-                alert('employee: ' + employee);
+                //alert('employee: ' + employee);
                 try {
                     const data = new FormData();
                     data.append('id', id);
